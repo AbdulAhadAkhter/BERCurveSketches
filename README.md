@@ -1,1 +1,1 @@
-# ErrorCorrectingCode
+# BERCurves
