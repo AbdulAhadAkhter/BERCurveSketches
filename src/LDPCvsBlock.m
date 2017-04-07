@@ -1,6 +1,6 @@
 %% CODE 
 clear all; close all; clc
-bits = 500;
+bits = 200;
 Sig = round(rand(1,bits));
 %Generator Array
 genArray = [1 0 0 0 1 1 0;0 1 0 0 0 1 1;0 0 1 0 1 0 1;0 0 0 1 1 1 1];
@@ -21,15 +21,16 @@ for s = 4:4:length(Sig)
     u = u+7;
 end
 % Variances 
-snr = [0 0.2 0.4 0.6 0.65 0.7 0.75 0.8 0.95];
-ber = zeros(length(snr),1);
+snr = [0:0.04:0.88];
+snr1 = [0:1:22];
+ber = zeros(length(snr1),1);
 %E/N for ideal system
 Eb_No=10.^(snr/10);
 
 %% Loop for Linear Block Code 
 %
-for m = 1:length(snr);                  
-receivedSignal = awgn(5 * SigArr-1,snr(m),'measured');
+for m = 1:length(snr1);                  
+receivedSignal = awgn(5 * SigArr-1,snr1(m),'measured');
 %Bit Decision
 for k = 1:1:length(5 * SigArr-1)                
     if receivedSignal(k)>0
@@ -72,8 +73,9 @@ end
 
 %% Plotting
 %
-semilogy(snr,BER1,'-r*',snr,ber,'-o');
-grid on
+plot(snr1,BER1,'-r*');
+hold on
+plot(snr,ber,'-o');
 legend('Linear Block Code','Low Density Parity Check')
 title('Comparison of LDPC vs linear block code')
 xlabel('SNR')
